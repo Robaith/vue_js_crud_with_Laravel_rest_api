@@ -1,8 +1,8 @@
 <template>
     <tr>
-              <td>1</td>
-              <td>robo</td>
-              <td>jhgjhg</td>
+              <td>{{ customer.id }}</td>
+              <td>{{ customer.first_name }} {{ customer.last_name }}</td>
+              <td>{{ customer.email }}</td>
               <td>
                   <button class="mini ui blue button">Edit</button>
                   <button class="mini ui red button">Delete</button>
@@ -13,7 +13,13 @@
 <script>
 
 export default {
-  name:"Customer"
+  name:"Customer",
+
+  props: {
+    customer: {
+      type: Object
+    }
+  }
 
 }
 </script>

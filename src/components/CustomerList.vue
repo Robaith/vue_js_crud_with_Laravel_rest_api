@@ -12,7 +12,11 @@
         </thead>
 
         <tbody>
-          <Customer />
+          <Customer
+            v-for="customer in customers"
+            :key="customer.id"
+            :customer="customer"
+           />
         </tbody>
       </table>
     </div>
@@ -25,6 +29,11 @@ export default {
   name:"CustomerList",
   components:{
       Customer
+  },
+  props: {
+    customers: {
+      type: Array
+    }
   }
 
 }
