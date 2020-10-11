@@ -7,9 +7,9 @@
     </div>
 
     <div class="ui main container">
-      <MyForm />
+      <MyForm :form="form" @onFormSubmit="onFormSubmit" />
       <Loader v-if="loader" />
-      <CustomerList :customers="customers" @onDelete="onDelete" />
+      <CustomerList :customers="customers" @onDelete="onDelete" @onEdit="onEdit" />
     </div>
 
   </div>
@@ -32,6 +32,7 @@ export default {
     return {
       url: "http://localhost/laravel-rest-api-master/public/api/customers",
       customers: [],
+      form: {first_name: "", last_name: "", email: "", isEdit: ""},
       loader: false
     };
   },
@@ -55,8 +56,49 @@ export default {
       }).catch(e => {
         alert(e);
       });
-    }
+    },
+    onFormSubmit(data) {
+      if(data.isEdit) {
+        //call edit function
+        this.editCustomer(data)
+      }
+      else {
+        //call create function
+        this.createCustomer(data);
+      }
+    },
+    createCustomer(data) {
+      this.loader = true;
 
+      axios.post(this.url, {
+        first_name:data.first_name,
+        last_name:data.last_name,
+        email:data.email
+      }).then(() => {
+        this.getCustomers();
+      }).catch(e => {
+        alert(e);
+      });
+    },
+    editCustomer(data) {
+      this.loader = true;
+      axios
+        .put(`${this.url}/${data.id}`, {
+          first_name: data.first_name,
+          last_name: data.last_name,
+          email: data.email
+        })
+        .then(() => {
+          this.getCustomers();
+        })
+        .catch(e => {
+          alert(e);
+        });
+    },
+    onEdit(data) {
+      this.form = data;
+      this.form.isEdit = true;
+    }
   },
   created() {
     this.getCustomers();

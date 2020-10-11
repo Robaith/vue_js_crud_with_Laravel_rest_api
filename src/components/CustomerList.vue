@@ -17,6 +17,7 @@
             :key="customer.id"
             :customer="customer"
             @onDelete="onDelete"
+            @onEdit="onEdit"
            />
         </tbody>
       </table>
@@ -39,6 +40,9 @@ export default {
   methods: {
     onDelete(id) {
       this.$emit("onDelete", id);
+    },
+    onEdit(data) {
+      this.$emit("onEdit", data);
     }
   }
 
