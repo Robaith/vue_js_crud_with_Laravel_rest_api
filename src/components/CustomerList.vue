@@ -16,6 +16,7 @@
             v-for="customer in customers"
             :key="customer.id"
             :customer="customer"
+            @onDelete="onDelete"
            />
         </tbody>
       </table>
@@ -33,6 +34,11 @@ export default {
   props: {
     customers: {
       type: Array
+    }
+  },
+  methods: {
+    onDelete(id) {
+      this.$emit("onDelete", id);
     }
   }
 

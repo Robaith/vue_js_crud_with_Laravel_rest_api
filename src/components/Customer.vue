@@ -5,7 +5,7 @@
               <td>{{ customer.email }}</td>
               <td>
                   <button class="mini ui blue button">Edit</button>
-                  <button class="mini ui red button">Delete</button>
+                  <button class="mini ui red button" @click="onDelete">Delete</button>
               </td>
           </tr>
 </template>
@@ -18,6 +18,11 @@ export default {
   props: {
     customer: {
       type: Object
+    }
+  },
+  methods: {
+    onDelete() {
+      this.$emit("onDelete", this.customer.id);
     }
   }
 

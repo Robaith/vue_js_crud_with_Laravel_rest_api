@@ -8,7 +8,8 @@
 
     <div class="ui main container">
       <MyForm />
-      <CustomerList :customers="customers" />
+      <Loader v-if="loader" />
+      <CustomerList :customers="customers" @onDelete="onDelete" />
     </div>
 
   </div>
@@ -18,25 +19,44 @@
 import axios from "axios";
 import MyForm from "./components/MyForm";
 import CustomerList from "./components/CustomerList";
+import Loader from "./components/Loader";
 
 export default {
   name: 'App',
   components: {
     MyForm,
-    CustomerList
+    CustomerList,
+    Loader
   },
   data() {
     return {
       url: "http://localhost/laravel-rest-api-master/public/api/customers",
-      customers: []
+      customers: [],
+      loader: false
     };
   },
   methods: {
     getCustomers() {
+      this.loader = true;
+
       axios.get(this.url).then(data => {
         this.customers = data.data;
+        this.loader = false;
+      });
+    },
+    onDelete(id) {
+      this.deleteCustomer(id);
+    },
+    deleteCustomer(id) {
+      this.loader = true;
+
+      axios.delete(`${this.url}/${id}`).then(() => {
+        this.getCustomers();
+      }).catch(e => {
+        alert(e);
       });
     }
+
   },
   created() {
     this.getCustomers();
@@ -55,5 +75,15 @@ export default {
 .submit-button{
   margin-top: 24px !important;
   float: right;
+}
+
+.data {
+  margin-top: 15px;
+}
+thead tr th {
+  background: #e0e0e0 !important;
+}
+.ui.inverted.dimmer {
+  background-color: rgba(255, 255, 255, 0) !important;
 }
 </style>
